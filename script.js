@@ -172,6 +172,8 @@ class Slider extends React.Component {
     if (url) {
       window.location.href = url;
      }
+          console.log("Explore button clicked for slide index:", index); // Add this line for debugging
+
    }
   }
 
