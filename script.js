@@ -63,8 +63,8 @@ class Slide extends React.Component {
     const el = this.slide.current;
     const r = el.getBoundingClientRect();
 
-    el.style.setProperty('--x', event.clientX - (r.left + Math.floor(r.width / 2))); // Fix the typo here
-    el.style.setProperty('--y', event.clientY - (r.top + Math.floor(r.height / 2))); // Fix the typo here
+    el.style.setProperty('--x', event.clientX - (r.left + Math.floor(r.width / 2)));
+    el.style.setProperty('--y', event.clientY - (r.top + Math.floor(r.height / 2)));
   }
 
   handleMouseLeave(event) {
