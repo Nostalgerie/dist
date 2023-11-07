@@ -42,36 +42,55 @@ const slideData = [
 // Slide
 // =========================
 
-class Slide extends React.Component {
+class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleMouseMove = this.handleMouseMove.bind(this);
-    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.slider = React.createRef();
+    this.hammer = new Hammer(this.slider.current);
+
+    this.state = { current: 0 };
+    this.handlePreviousClick = this.handlePreviousClick.bind(this);
+    this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
-    this.imageLoaded = this.imageLoaded.bind(this);
-    this.slide = React.createRef();
   }
 
-  handleMouseMove(event) {
-    const el = this.slide.current;
-    const r = el.getBoundingClientRect();
-
-    el.style.setProperty('--x', event.clientX - (r.left + Math.floor(r.width / 2)));
-    el.style.setProperty('--y', event.clientY - (r.top + Math.floor(r.height / 2)));
+  componentDidMount() {
+    this.hammer.on('swipeleft', this.handleNextClick);
+    this.hammer.on('swiperight', this.handlePreviousClick);
   }
 
-  handleMouseLeave(event) {
-    this.slide.current.style.setProperty('--x', 0);
-    this.slide.current.style.setProperty('--y', 0);
+  componentWillUnmount() {
+    this.hammer.off('swipeleft', this.handleNextClick);
+    this.hammer.off('swiperight', this.handlePreviousClick);
   }
 
-  handleSlideClick(event) {
-    this.props.handleSlideClick(this.props.slide.index);
+  handlePreviousClick() {
+    const previous = this.state.current - 1;
+
+    this.setState({
+      current: previous < 0 ?
+        this.props.slides.length - 1 :
+        previous
+    });
   }
 
-  imageLoaded(event) {
-    event.target.style.opacity = 1;
+  handleNextClick() {
+    const next = this.state.current + 1;
+
+    this.setState({
+      current: next === this.props.slides.length ?
+        0 :
+        next
+    });
+  }
+
+  handleSlideClick(index) {
+    if (this.state.current !== index) {
+      this.setState({
+        current: index
+      });
+    }
   }
 
   render() {
