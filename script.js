@@ -139,6 +139,14 @@ class Slider extends React.Component {
     this.handleSlideClick = this.handleSlideClick.bind(this);
   }
 
+  componentDidMount() {
+    const sliderWrapper = document.querySelector('.slider__wrapper');
+    const hammer = new Hammer(sliderWrapper);
+
+    hammer.on('swipeleft', this.handleNextClick);
+    hammer.on('swiperight', this.handlePreviousClick);
+  }
+
   handlePreviousClick() {
     const previous = this.state.current - 1;
 
