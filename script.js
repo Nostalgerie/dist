@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function() {
+  // Your JavaScript code here
 const slideData = [
 {
   index: 0,
@@ -66,7 +68,11 @@ class Slide extends React.Component {
     this.slide.current.style.setProperty('--y', 0);
   }
   handleSlideClick(event) {
-    this.props.handleSlideClick(this.props.slide.index);
+    const { index, url } = this.props.slide;
+    if (url) {
+      window.open(url, '_self'); // '_self' opens the URL in the same tab
+    }
+    this.props.handleSlideClick(index);
   }
 
   imageLoaded(event) {
@@ -222,3 +228,4 @@ class Slider extends React.Component {
 
 
 ReactDOM.render( /*#__PURE__*/React.createElement(Slider, { heading: "Example Slider", slides: slideData }), document.getElementById('app'));
+});
