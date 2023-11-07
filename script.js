@@ -73,20 +73,20 @@ class Slide extends React.Component {
     event.target.style.opacity = 1;
   }
   render() {
-    const { src, button, headline, index, url } = this.props.slide;
-    const current = this.props.current;
-    let classNames = 'slide';
-    if (current === index) classNames += ' slide--current';
-    else if (current - 1 === index) classNames += ' slide--previous';
-    else if (current + 1 === index) classNames += ' slide--next';
-
-    render() {
     const { src, button, headline, index } = this.props.slide;
     const current = this.props.current;
     let classNames = 'slide';
     if (current === index) classNames += ' slide--current';else
     if (current - 1 === index) classNames += ' slide--previous';else
     if (current + 1 === index) classNames += ' slide--next';
+
+    return /*#__PURE__*/(
+      React.createElement("li", {
+        ref: this.slide,
+        className: classNames,
+        onClick: this.handleSlideClick,
+        onMouseMove: this.handleMouseMove,
+        onMouseLeave: this.handleMouseLeave }, /*#__PURE__*/
 
       React.createElement("div", { className: "slide__image-wrapper" }, /*#__PURE__*/
       React.createElement("img", {
