@@ -125,30 +125,17 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.slider = React.createRef();
-    this.hammer = new Hammer(this.slider.current);
-
     this.state = { current: 0 };
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
   }
 
-  componentDidMount() {
-    this.hammer.on('swipeleft', this.handleNextClick);
-    this.hammer.on('swiperight', this.handlePreviousClick);
-  }
-
-  componentWillUnmount() {
-    this.hammer.off('swipeleft', this.handleNextClick);
-    this.hammer.off('swiperight', this.handlePreviousClick);
-  }
-
   handlePreviousClick() {
     const previous = this.state.current - 1;
 
     this.setState({
-      current: previous < 0 ? this.props.slides.length - 1 : previous
+      current: previous < 0 ? this.props.slides.length - 1 : previous,
     });
   }
 
@@ -156,33 +143,47 @@ class Slider extends React.Component {
     const next = this.state.current + 1;
 
     this.setState({
-      current: next === this.props.slides.length ? 0 : next
+      current: next === this.props.slides.length ? 0 : next,
     });
   }
 
   handleSlideClick(index) {
     if (this.state.current !== index) {
       this.setState({
-        current: index
+        current: index,
       });
     }
   }
 
+  componentDidMount() {
+    // Add Hammer.js swipe event handling
+    this.hammer = new Hammer(this.sliderRef.current);
+    this.hammer.on("swipeleft", this.handleNextClick);
+    this.hammer.on("swiperight", this.handlePreviousClick);
+  }
+
+  componentWillUnmount() {
+    // Remove Hammer.js event listeners when the component unmounts
+    this.hammer.off("swipeleft", this.handleNextClick);
+    this.hammer.off("swiperight", this.handlePreviousClick);
+  }
+
   render() {
-    const { current } = this.state;
+    const { current, direction } = this.state;
     const { slides, heading } = this.props;
-    const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()`;
+    const headingId = `slider-heading__${heading.replace(/\s+/g, "-").toLowerCase()}`;
     const wrapperTransform = {
-      transform: `translateX(-${current * (100 / slides.length)}%)`
+      transform: `translateX(-${current * (100 / slides.length)}%)`,
     };
 
     return (
-      <div className="slider" aria-labelledby={headingId} ref={this.slider}>
-        <ul className="slider__wrapper" style={wrapperTransform}>
+      <div className="slider" aria-labelledby={headingId}>
+        <ul className="slider__wrapper" style={wrapperTransform} ref={this.sliderRef}>
           <h3 id={headingId} className="visuallyhidden">
             {heading}
           </h3>
-          {slides.map(slide => (
+
+          {slides.map((slide) => (
             <Slide
               key={slide.index}
               slide={slide}
@@ -191,6 +192,7 @@ class Slider extends React.Component {
             />
           ))}
         </ul>
+
         <div className="slider__controls">
           <SliderControl
             type="previous"
