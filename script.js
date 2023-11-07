@@ -3,36 +3,42 @@ const slideData = [
   index: 0,
   headline: 'Carmen R',
   button: 'Explore',
+  url: 'https://nostalgerie.eu/all-products#carmenr',
   src: 'https://i.imgur.com/5Lf2kgz.jpg' },
 
 {
   index: 1,
   headline: 'Lady',
   button: 'Explore',
+  url: 'https://nostalgerie.eu/all-products#lady',
   src: 'https://i.imgur.com/kPrsCl9.jpg' },
 
 {
   index: 2,
   headline: 'Dana R',
   button: 'Explore',
+  url: 'https://nostalgerie.eu/all-products#danar',
   src: 'https://i.imgur.com/M2VwVn2.jpg' },
 
 {
   index: 3,
   headline: 'Dana B',
   button: 'Explore',
+  url: 'https://nostalgerie.eu/all-products#danab',
   src: 'https://i.imgur.com/4YtBya0.jpg' },
 
 {
   index: 4,
   headline: 'Cora W',
   button: 'Explore',
+  url: 'https://nostalgerie.eu/all-products#coraw',
   src: 'https://i.imgur.com/T16xmnq.jpg' },
 
 {
   index: 5,
   headline: 'Miss',
   button: 'Explore',
+  url: 'https://nostalgerie.eu/all-products#miss',
   src: 'https://i.imgur.com/zj0kpFj.jpg' }];
 
 
@@ -58,7 +64,7 @@ class Slide extends React.Component {
     const r = el.getBoundingClientRect();
 
     el.style.setProperty('--x', event.clientX - (r.left + Math.floor(r.width / 2)));
-    el.style.setProperty('--y', event.clientY - (r.top + Math.floor(r.height / 2)));
+    el.style.setProperty('--y', event.clientY - (r.top + Math floor(r.height / 2)));
   }
 
   handleMouseLeave(event) {
@@ -68,6 +74,13 @@ class Slide extends React.Component {
 
   handleSlideClick(event) {
     this.props.handleSlideClick(this.props.slide.index);
+  }
+
+  handleButtonClicked() {
+    const { url } = this.props.slide;
+    if (url) {
+      window.location.href = url;
+    }
   }
 
   imageLoaded(event) {
@@ -83,13 +96,35 @@ class Slide extends React.Component {
     if (current - 1 === index) classNames += ' slide--previous';else
     if (current + 1 === index) classNames += ' slide--next';
 
-    return /*#__PURE__*/(
-      React.createElement("li", {
-        ref: this.slide,
-        className: classNames,
-        onClick: this.handleSlideClick,
-        onMouseMove: this.handleMouseMove,
-        onMouseLeave: this.handleMouseLeave }, /*#__PURE__*/
+    return (
+      <li
+        ref={this.slide}
+        className={classNames}
+        onClick={this.handleSlideClick}
+        onMouseMove={this.handleMouseMove}
+        onMouseLeave={this.handleMouseLeave}
+      >
+        <div className="slide__image-wrapper">
+          <img
+            className="slide__image"
+            alt={headline}
+            src={src}
+            onLoad={this.imageLoaded}
+          />
+        </div>
+        <article className="slide__content">
+          <h2 className="slide__headline">{headline}</h2>
+          <button
+            className="slide__action btn"
+            onClick={this.handleButtonClicked}
+          >
+            {button}
+          </button>
+        </article>
+      </li>
+    );
+  }
+}
 
       React.createElement("div", { className: "slide__image-wrapper" }, /*#__PURE__*/
       React.createElement("img", {
