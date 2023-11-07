@@ -133,61 +133,57 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { current: 0 };
+    this.state = { current: 0, touchStart: null, touchEnd: null };
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
   }
 
-  handlePreviousClick() {
-    const previous = this.state.current - 1;
-
-    this.setState({
-      current: previous < 0 ?
-      this.props.slides.length - 1 :
-      previous });
-
+  handleTouchStart(e) {
+    const touchStart = e.targetTouches[0].clientX;
+    this.setState({ touchStart });
   }
 
-  handleNextClick() {
-    const next = this.state.current + 1;
-
-    this.setState({
-      current: next === this.props.slides.length ?
-      0 :
-      next });
-
+  handleTouchMove(e) {
+    const touchEnd = e.targetTouches[0].clientX;
+    this.setState({ touchEnd });
   }
 
-  handleSlideClick(index) {
-    if (this.state.current !== index) {
-      this.setState({
-        current: index });
-
+  handleTouchEnd() {
+    const { touchStart, touchEnd } = this.state;
+    // Consider a swipe only if the touch movement is more significant
+    if (touchStart - touchEnd > 50) {
+      // Swipe left
+      this.handleNextClick();
+    } else if (touchEnd - touchStart > 50) {
+      // Swipe right
+      this.handlePreviousClick();
     }
+
+    // Reset the touch positions
+    this.setState({ touchStart: null, touchEnd: null });
   }
+
+  // ... rest of your component methods ...
 
   render() {
-    const { current, direction } = this.state;
-    const { slides, heading } = this.props;
-    const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()}`;
-    const wrapperTransform = {
-      'transform': `translateX(-${current * (100 / slides.length)}%)` };
-
-
-    return /*#__PURE__*/(
-      React.createElement("div", { className: "slider", "aria-labelledby": headingId }, /*#__PURE__*/
-      React.createElement("ul", { className: "slider__wrapper", style: wrapperTransform }, /*#__PURE__*/
-      React.createElement("h3", { id: headingId, class: "visuallyhidden" }, heading),
-
-      slides.map(slide => {
-        return /*#__PURE__*/(
-          React.createElement(Slide, {
-            key: slide.index,
-            slide: slide,
-            current: current,
-            handleSlideClick: this.handleSlideClick }));
-
+    // ... rest of your component ...
+    return (
+      <div
+        className="slider"
+        onTouchStart={this.handleTouchStart}
+        onTouchMove={this.handleTouchMove}
+        onTouchEnd={this.handleTouchEnd}
+        aria-labelledby={headingId}
+      >
+        {/* ... rest of your component ... */}
+      </div>
+    );
+  }
+}
 
       })), /*#__PURE__*/
 
