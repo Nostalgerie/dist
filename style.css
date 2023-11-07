@@ -1,7 +1,12 @@
 @import url("https://fonts.googleapis.com/css?family=Playfair+Display:700|IBM+Plex+Sans:500&display=swap");
 :root {
+<<<<<<< HEAD
   --color-primary: #ffffff;
   --color-secondary: #101118;
+=======
+  --color-primary: #6B7A8F;
+  --color-secondary: #ffffff;
+>>>>>>> 24321d33188edceaaab0b8f889fb0e55112859a2
   --color-accent: #1D1F2F;
   --color-focus: #6D64F7;
   --base-duration: 600ms;
