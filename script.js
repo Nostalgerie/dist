@@ -69,7 +69,7 @@ class Slide extends React.Component {
   handleSlideClick(event) {
     this.props.handleSlideClick(this.props.slide.index);
     const { url } = this.props.slide;
-    window.open(url');
+    window.open(url);
   }
 
   imageLoaded(event) {
