@@ -238,49 +238,4 @@ h1, h2, h3 {
   to {
     opacity: 1;
   }
-/* Add this updated CSS to your existing code */
-
-.slide__image {
-  transform: translate(var(--x, 0px), var(--y, 0px));
-}
-
-.slide__headline {
-  font-size: 8vmin;
-  font-weight: 600;
-  position: relative;
-}
-
-.slide__content {
-  --d: 60;
-  opacity: 0;
-  padding: 4vmin;
-  position: relative;
-  transition: transform var(--base-duration) var(--base-ease);
-  visibility: hidden;
-}
-
-.slide--current .slide__content {
-  animation: fade-in calc(var(--base-duration) / 2) var(--base-ease) forwards;
-  visibility: visible;
-}
-
-@media (hover: hover) {
-  .slide--current .slide__content {
-    transform: translate(calc(var(--x, 0px) / var(--d) * -1px), calc(var(--y, 0px) / var(--d) * -1px));
-  }
-}
-
-.slide__content > * + * {
-  margin-top: 2rem;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 }
