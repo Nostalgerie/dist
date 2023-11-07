@@ -105,6 +105,7 @@ h1, h2, h3 {
 
 .slider__wrapper {
   display: flex;
+  touch-action: pan-y;
   margin: 0 calc(var(--slide-margin) * -1);
   position: absolute;
   transition: transform var(--base-duration) cubic-bezier(0.25, 1, 0.35, 1);
