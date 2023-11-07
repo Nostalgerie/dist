@@ -44,7 +44,6 @@ const slideData = [
 // =========================
 // Slide
 // =========================
-document.addEventListener('DOMContentLoaded', function() {
 class Slide extends React.Component {
   constructor(props) {
     super(props);
@@ -68,8 +67,6 @@ class Slide extends React.Component {
   }
   handleSlideClick(event) {
     this.props.handleSlideClick(this.props.slide.index);
-    const { url } = this.props.slide;
-    window.open(url);
   }
 
   imageLoaded(event) {
@@ -124,18 +121,7 @@ const SliderControl = ({ type, title, handleClick }) => {
 
 };
 
-function handleButtonClick(url) {
-  window.location.href = url; // Navigate to the URL in the same tab
-}
 
-// Loop through the slideData array and attach a click event handler to each button
-const buttons = document.querySelectorAll('.slide__action.btn');
-slideData.forEach((slide, index) => {
-  const button = buttons[index];
-  button.addEventListener('click', () => {
-    handleButtonClick(slide.url);
-  });
-});
 // =========================
 // Slider
 // =========================
@@ -227,7 +213,7 @@ class Slider extends React.Component {
 
 
   }}
-});
+
 
 
 ReactDOM.render( /*#__PURE__*/React.createElement(Slider, { heading: "Example Slider", slides: slideData }), document.getElementById('app'));
