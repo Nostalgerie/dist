@@ -48,107 +48,54 @@ const slideData = [
 // Slide
 // =========================
 
-class Slide {
-  constructor(slideData, current, handleSlideClick) {
-    this.slideData = slideData;
-    this.current = current;
-    this.handleSlideClick = handleSlideClick;
+class Slide extends React.Component {
+  constructor(props) {
+    super(props);
 
-    this.slide = document.createElement('li');
-    this.slide.className = 'slide';
-    this.slide.style.setProperty('--x', 0);
-    this.slide.style.setProperty('--y', 0);
-
-    this.imageWrapper = document.createElement('div');
-    this.imageWrapper.className = 'slide__image-wrapper';
-
-    this.image = document.createElement('img');
-    this.image.className = 'slide__image';
-    this.image.alt = this.slideData.headline;
-    this.image.src = this.slideData.src;
-    this.image.addEventListener('load', this.imageLoaded.bind(this));
-
-    this.content = document.createElement('article');
-    this.content.className = 'slide__content';
-
-    this.headline = document.createElement('h2');
-    this.headline.className = 'slide__headline';
-    this.headline.textContent = this.slideData.headline;
-
-    this.button = document.createElement('button');
-    this.button.className = 'slide__action btn';
-    this.button.textContent = this.slideData.button;
-    this.button.addEventListener('click', this.handleSlideClick.bind(this));
-
-    this.content.appendChild(this.headline);
-    this.content.appendChild(this.button);
-
-    this.imageWrapper.appendChild(this.image);
-    this.slide.appendChild(this.imageWrapper);
-    this.slide.appendChild(this.content);
-
-    if (this.current === this.slideData.index) {
-      this.slide.className += ' slide--current';
-    } else if (this.current - 1 === this.slideData.index) {
-      this.slide.className += ' slide--previous';
-    } else if (this.current + 1 === this.slideData.index) {
-      this.slide.className += ' slide--next';
-    }
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.handleSlideClick = this.handleSlideClick.bind(this);
+    this.imageLoaded = this.imageLoaded.bind(this);
+    this.slide = React.createRef();
   }
 
   handleMouseMove(event) {
-    const r = this.slide.getBoundingClientRect();
-    this.slide.style.setProperty('--x', event.clientX - (r.left + Math.floor(r.width / 2)));
-    this.slide.style.setProperty('--y', event.clientY - (r.top + Math.floor(r.height / 2)));
+    const el = this.slide.current;
+    const r = el.getBoundingClientRect();
+
+    el.style.setProperty('--x', event.clientX - (r.left + Math.floor(r.width / 2)));
+    el.style.setProperty('--y', event.clientY - (r.top + Math.floor(r.height / 2)));
   }
 
-  handleMouseLeave() {
-    this.slide.style.setProperty('--x', 0);
-    this.slide.style.setProperty('--y', 0);
+  handleMouseLeave(event) {
+    this.slide.current.style.setProperty('--x', 0);
+    this.slide.current.style.setProperty('--y', 0);
   }
 
-  handleSlideClick() {
-    this.handleSlideClick(this.slideData.index);
-  }
-
-  handleButtonClicked() {
-    const { url } = this.slideData;
-    if (url) {
-      window.location.href = url;
-    }
+  handleSlideClick(event) {
+    this.props.handleSlideClick(this.props.slide.index);
   }
 
   imageLoaded(event) {
     event.target.style.opacity = 1;
   }
 
-  getElement() {
-    return this.slide;
-  }
-}
+  render() {
+    const { src, button, headline, index } = this.props.slide;
+    const current = this.props.current;
+    let classNames = 'slide';
 
-// Usage
-const slideData = [
-  {
-    index: 0,
-    headline: 'Carmen R',
-    button: 'Explore',
-    src: 'https://i.imgur.com/5Lf2kgz.jpg',
-  },
-  // Add more slide data here
-];
+    if (current === index) classNames += ' slide--current';else
+    if (current - 1 === index) classNames += ' slide--previous';else
+    if (current + 1 === index) classNames += ' slide--next';
 
-function handleSlideClick(index) {
-  // Handle slide click (e.g., change current slide)
-}
-
-const currentSlide = 0; // Set the current slide index here
-const slides = slideData.map((data) => new Slide(data, currentSlide, handleSlideClick));
-const slider = document.querySelector('.slider__wrapper');
-
-slides.forEach((slide) => {
-  slider.appendChild(slide.getElement());
-});
+    return /*#__PURE__*/(
+      React.createElement("li", {
+        ref: this.slide,
+        className: classNames,
+        onClick: this.handleSlideClick,
+        onMouseMove: this.handleMouseMove,
+        onMouseLeave: this.handleMouseLeave }, /*#__PURE__*/
 
       React.createElement("div", { className: "slide__image-wrapper" }, /*#__PURE__*/
       React.createElement("img", {
