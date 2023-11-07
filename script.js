@@ -42,55 +42,36 @@ const slideData = [
 // Slide
 // =========================
 
-class Slider extends React.Component {
+class Slide extends React.Component {
   constructor(props) {
     super(props);
 
-    this.slider = React.createRef();
-    this.hammer = new Hammer(this.slider.current);
-
-    this.state = { current: 0 };
-    this.handlePreviousClick = this.handlePreviousClick.bind(this);
-    this.handleNextClick = this.handleNextClick.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
+    this.imageLoaded = this.imageLoaded.bind(this);
+    this.slide = React.createRef();
   }
 
-  componentDidMount() {
-    this.hammer.on('swipeleft', this.handleNextClick);
-    this.hammer.on('swiperight', this.handlePreviousClick);
+  handleMouseMove(event) {
+    const el = this.slide.current;
+    const r = el.getBoundingClientRect();
+
+    el.style.setProperty('--x', event.clientX - (r.left + Math.floor(r.width / 2)));
+    el.style.setProperty('--y', event.clientY - (r.top + Math.floor(r.height / 2)));
   }
 
-  componentWillUnmount() {
-    this.hammer.off('swipeleft', this.handleNextClick);
-    this.hammer.off('swiperight', this.handlePreviousClick);
+  handleMouseLeave(event) {
+    this.slide.current.style.setProperty('--x', 0);
+    this.slide.current.style.setProperty('--y', 0);
   }
 
-  handlePreviousClick() {
-    const previous = this.state.current - 1;
-
-    this.setState({
-      current: previous < 0 ?
-        this.props.slides.length - 1 :
-        previous
-    });
+  handleSlideClick(event) {
+    this.props.handleSlideClick(this.props.slide.index);
   }
 
-  handleNextClick() {
-    const next = this.state.current + 1;
-
-    this.setState({
-      current: next === this.props.slides.length ?
-        0 :
-        next
-    });
-  }
-
-  handleSlideClick(index) {
-    if (this.state.current !== index) {
-      this.setState({
-        current: index
-      });
-    }
+  imageLoaded(event) {
+    event.target.style.opacity = 1;
   }
 
   render() {
@@ -152,23 +133,10 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.slider = React.createRef();
-    this.hammer = new Hammer(this.slider.current);
-
     this.state = { current: 0 };
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
-  }
-
-  componentDidMount() {
-    this.hammer.on('swipeleft', this.handleNextClick);
-    this.hammer.on('swiperight', this.handlePreviousClick);
-  }
-
-  componentWillUnmount() {
-    this.hammer.off('swipeleft', this.handleNextClick);
-    this.hammer.off('swiperight', this.handlePreviousClick);
   }
 
   handlePreviousClick() {
@@ -176,9 +144,9 @@ class Slider extends React.Component {
 
     this.setState({
       current: previous < 0 ?
-        this.props.slides.length - 1 :
-        previous
-    });
+      this.props.slides.length - 1 :
+      previous });
+
   }
 
   handleNextClick() {
@@ -186,56 +154,31 @@ class Slider extends React.Component {
 
     this.setState({
       current: next === this.props.slides.length ?
-        0 :
-        next
-    });
+      0 :
+      next });
+
   }
 
   handleSlideClick(index) {
     if (this.state.current !== index) {
       this.setState({
-        current: index
-      });
+        current: index });
+
     }
   }
 
   render() {
-    const { current } = this.state;
+    const { current, direction } = this.state;
     const { slides, heading } = this.props;
-    const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()`;
+    const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()}`;
     const wrapperTransform = {
-      'transform': `translateX(-${current * (100 / slides.length)}%)`
-    };
+      'transform': `translateX(-${current * (100 / slides.length)}%)` };
 
-    return (
-      <div className="slider" aria-labelledby={headingId} ref={this.slider}>
-        <ul className="slider__wrapper" style={wrapperTransform}>
-          {slides.map(slide => (
-            <Slide
-              key={slide.index}
-              slide={slide}
-              current={current}
-              handleSlideClick={this.handleSlideClick}
-            />
-          )}
-        </ul>
 
-        <div className="slider__controls">
-          <SliderControl
-            type="previous"
-            title="Go to previous slide"
-            handleClick={this.handlePreviousClick}
-          />
-          <SliderControl
-            type="next"
-            title="Go to next slide"
-            handleClick={this.handleNextClick}
-          />
-        </div>
-      </div>
-    );
-  }
-}
+    return /*#__PURE__*/(
+      React.createElement("div", { className: "slider", "aria-labelledby": headingId }, /*#__PURE__*/
+      React.createElement("ul", { className: "slider__wrapper", style: wrapperTransform }, /*#__PURE__*/
+      React.createElement("h3", { id: headingId, class: "visuallyhidden" }, heading),
 
       slides.map(slide => {
         return /*#__PURE__*/(
