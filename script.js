@@ -168,11 +168,8 @@ class Slider extends React.Component {
     if (this.state.current !== index) {
       this.setState({
         current: index });
-    const url = this.props.slides[index].url;
-    if (url) {
-      window.location.href = url;
-     }
-   }
+
+    }
   }
 
   render() {
