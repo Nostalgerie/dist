@@ -1,5 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // Your JavaScript code here
 const slideData = [
 {
   index: 0,
@@ -68,7 +66,7 @@ class Slide extends React.Component {
     this.slide.current.style.setProperty('--y', 0);
   }
   handleSlideClick(event) {
-    const { index, url } = this.props.slide;
+    this.props.handleSlideClick(this.props.slide.index);
   }
 
   imageLoaded(event) {
@@ -174,8 +172,6 @@ class Slider extends React.Component {
     if (url) {
       window.location.href = url;
      }
-          console.log("Explore button clicked for slide index:", index); // Add this line for debugging
-
    }
   }
 
@@ -224,4 +220,3 @@ class Slider extends React.Component {
 
 
 ReactDOM.render( /*#__PURE__*/React.createElement(Slider, { heading: "Example Slider", slides: slideData }), document.getElementById('app'));
-});
