@@ -44,6 +44,7 @@ const slideData = [
 // =========================
 // Slide
 // =========================
+document.addEventListener('DOMContentLoaded', function() {
 class Slide extends React.Component {
   constructor(props) {
     super(props);
@@ -226,7 +227,7 @@ class Slider extends React.Component {
 
 
   }}
-
+});
 
 
 ReactDOM.render( /*#__PURE__*/React.createElement(Slider, { heading: "Example Slider", slides: slideData }), document.getElementById('app'));
