@@ -69,14 +69,7 @@ class Slide extends React.Component {
   }
   handleSlideClick(event) {
     const { index, url } = this.props.slide;
-    if (event.target.tagName === 'BUTTON') {
-      const { index, url } = this.props.slide;
-      if (url) {
-        window.open(url, '_self'); // Open the URL in the same tab
-      }
-    } else {
-      this.props.handleSlideClick(index);
-    }
+  }
 
   imageLoaded(event) {
     event.target.style.opacity = 1;
