@@ -80,33 +80,13 @@ class Slide extends React.Component {
     else if (current - 1 === index) classNames += ' slide--previous';
     else if (current + 1 === index) classNames += ' slide--next';
 
-    return (
-      <li
-        ref={this.slide}
-        className={classNames}
-        onClick={this.handleSlideClick}
-        onMouseMove={this.handleMouseMove}
-        onMouseLeave={this.handleMouseLeave}
-      >
-        <div className="slide__image-wrapper">
-          <img
-            className="slide__image"
-            alt={headline}
-            src={src}
-            onLoad={this.imageLoaded}
-          />
-        </div>
-        <article className="slide__content">
-          <h2 className="slide__headline">{headline}</h2>
-          {/* Add an anchor element around the button */}
-          <a href={url} className="slide__action btn">
-            {button}
-          </a>
-        </article>
-      </li>
-    );
-  }
-}
+    render() {
+    const { src, button, headline, index } = this.props.slide;
+    const current = this.props.current;
+    let classNames = 'slide';
+    if (current === index) classNames += ' slide--current';else
+    if (current - 1 === index) classNames += ' slide--previous';else
+    if (current + 1 === index) classNames += ' slide--next';
 
       React.createElement("div", { className: "slide__image-wrapper" }, /*#__PURE__*/
       React.createElement("img", {
