@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Hammer from 'hammerjs';
+
 const slideData = [
 {
   index: 0,
@@ -67,6 +71,8 @@ class Slide extends React.Component {
   }
   handleSlideClick(event) {
     this.props.handleSlideClick(this.props.slide.index);
+    const { url } = this.props.slide;
+    window.location.href = url;
   }
 
   imageLoaded(event) {
