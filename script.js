@@ -50,6 +50,7 @@ class Slide extends React.Component {
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
+    this.handleButtonClick = this.handleButtonClick.bind(this);
     this.imageLoaded = this.imageLoaded.bind(this);
     this.slide = React.createRef();
   }
@@ -68,16 +69,16 @@ class Slide extends React.Component {
   handleSlideClick(event) {
     this.props.handleSlideClick(this.props.slide.index);
   }
+
   handleButtonClick(event) {
   // Open the URL in a new tab when the button is clicked
-    window.open(this.props.slide.url, '_blank');
-  }
-
+  window.open(this.props.slide.url, '_blank');
+}
   imageLoaded(event) {
     event.target.style.opacity = 1;
   }
   render() {
-    const { src, button, headline, index } = this.props.slide;
+    const { src, url, button, headline, index } = this.props.slide;
     const current = this.props.current;
     let classNames = 'slide';
     if (current === index) classNames += ' slide--current';else
@@ -89,6 +90,7 @@ class Slide extends React.Component {
         ref: this.slide,
         className: classNames,
         onClick: this.handleSlideClick,
+        onButtonClick: this.handleButtonClick,
         onMouseMove: this.handleMouseMove,
         onMouseLeave: this.handleMouseLeave }, /*#__PURE__*/
 
@@ -97,6 +99,7 @@ class Slide extends React.Component {
         className: "slide__image",
         alt: headline,
         src: src,
+        url: url,
         onLoad: this.imageLoaded })), /*#__PURE__*/
 
 
@@ -117,7 +120,7 @@ class Slide extends React.Component {
 
 const SliderControl = ({ type, title, handleClick }) => {
   return /*#__PURE__*/(
-    React.createElement("button", { className: `btn btn--${type}`, title: title, onClick: handleClick }, /*#__PURE__*/
+    React.createElement("button", { className: `btn btn--${type}`, title: title, onClick: handleButtonClick }, /*#__PURE__*/
     React.createElement("svg", { className: "icon", viewBox: "0 0 24 24" }, /*#__PURE__*/
     React.createElement("path", { d: "M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" }))));
 
@@ -169,12 +172,12 @@ class Slider extends React.Component {
   }
 
   handleSlideClick(index) {
-  if (this.state.current !== index) {
-    this.setState({
-      current: index,
-    });
+    if (this.state.current !== index) {
+      this.setState({
+        current: index });
+
+    }
   }
-}
 
   render() {
     const { current, direction } = this.state;
