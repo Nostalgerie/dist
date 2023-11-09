@@ -123,19 +123,6 @@ const SliderControl = ({ type, title, handleClick }) => {
     React.createElement("button", { className: `btn btn--${type}`, title: title, onClick: handleClick }, /*#__PURE__*/
     React.createElement("svg", { className: "icon", viewBox: "0 0 24 24" }, /*#__PURE__*/
     React.createElement("path", { d: "M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" }))));
-const SliderControl = ({ type, title, url }) => {
-  const handleButtonClick = () => {
-    window.open(url, '_blank'); // Open the URL in a new tab
-  };
-  return (
-    <button className={`btn btn--${type}`} title={title} onClick={handleButtonClick}>
-      <svg className="icon" viewBox="0 0 24 24">
-        <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
-      </svg>
-    </button>
-  );
-};
-
 
 };
 
