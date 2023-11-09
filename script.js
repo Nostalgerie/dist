@@ -66,7 +66,11 @@ class Slide extends React.Component {
     this.slide.current.style.setProperty('--y', 0);
   }
   handleSlideClick(event) {
-    this.props.handleSlideClick(this.props.slide.index, this.props.slide.url);
+    this.props.handleSlideClick(this.props.slide.index);
+  }
+  handleButtonClick(event) {
+  // Open the URL in a new tab when the button is clicked
+    window.open(this.props.slide.url, '_blank');
   }
 
   imageLoaded(event) {
@@ -164,14 +168,11 @@ class Slider extends React.Component {
 
   }
 
-  handleSlideClick(index, url) {
+  handleSlideClick(index) {
   if (this.state.current !== index) {
     this.setState({
       current: index,
     });
-
-    // Open the URL in a new tab when a slide is clicked
-    window.open(url, '_blank');
   }
 }
 
