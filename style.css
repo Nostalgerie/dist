@@ -51,7 +51,7 @@ h1, h2, h3 {
 .btn {
   background-color: var(--color-primary);
   border: none;
-  border-radius: 0.125rem;
+  border-radius: 1.313rem;
   color: white;
   cursor: pointer;
   font-family: inherit;
