@@ -135,7 +135,7 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { current: 0 };
+    this.state = { current: this.props.slides.length - 1 };
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
