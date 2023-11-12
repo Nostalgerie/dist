@@ -150,22 +150,24 @@ class Slider extends React.Component {
   }
 
   handlePreviousClick() {
-  const { current } = this.state;
-  const previous = current === 0 ? this.props.slides.length - 1 : current - 1;
+    const previous = this.state.current - 1;
 
-  this.setState({
-    current: previous
-  });
-}
+    this.setState({
+      current: previous < 0 ?
+      this.props.slides.length - 1 :
+      previous });
 
-handleNextClick() {
-  const { current } = this.state;
-  const next = current === this.props.slides.length - 1 ? 0 : current + 1;
+  }
 
-  this.setState({
-    current: next
-  });
-}
+  handleNextClick() {
+    const next = this.state.current + 1;
+
+    this.setState({
+      current: next === this.props.slides.length ?
+      0 :
+      next });
+
+  }
 
 
   handleSlideClick(index) {
