@@ -72,7 +72,7 @@ class Slide extends React.Component {
 
   handleButtonClick(event) {
   // Open the URL in a new tab when the button is clicked
-  window.open(this.props.slide.url, '_self');
+  window.top.location.href = this.props.slide.url;
 }
   imageLoaded(event) {
     event.target.style.opacity = 1;
@@ -135,7 +135,7 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { current: this.props.slides.length - 1 };
+    this.state = { current: 0 };
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
