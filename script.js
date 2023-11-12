@@ -72,7 +72,7 @@ class Slide extends React.Component {
 
   handleButtonClick(event) {
   // Open the URL in a new tab when the button is clicked
-  window.location.href = this.props.slide.url;
+  window.open(this.props.slide.url, '_self');
 }
   imageLoaded(event) {
     event.target.style.opacity = 1;
