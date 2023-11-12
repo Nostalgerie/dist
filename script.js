@@ -179,35 +179,25 @@ class Slider extends React.Component {
   }
 
   render() {
-  const { current } = this.state;
-  const { slides, heading } = this.props;
-  const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()}`;
-  const wrapperTransform = {
-    'transform': `translateX(-${current * (100 / slides.length)}%)`
-  };
+    const { current, direction } = this.state;
+    const { slides, heading } = this.props;
+    const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()}`;
+    const wrapperTransform = {
+      'transform': `translateX(-${current * (100 / slides.length)}%)` };
 
-  return (
-    <div className="slider" aria-labelledby={headingId}>
-      <ul className="slider__wrapper" style={wrapperTransform}>
-        <h3 id={headingId} className="visuallyhidden">{heading}</h3>
 
-        {/* Render the slides */}
-        {slides.map(slide => (
-          <Slide
-            key={slide.index}
-            slide={slide}
-            current={current}
-            handleSlideClick={this.handleSlideClick}
-          />
-        ))}
-      </ul>
+    return /*#__PURE__*/(
+      React.createElement("div", { className: "slider", "aria-labelledby": headingId }, /*#__PURE__*/
+      React.createElement("ul", { className: "slider__wrapper", style: wrapperTransform }, /*#__PURE__*/
+      React.createElement("h3", { id: headingId, class: "visuallyhidden" }, heading),
 
-      <div className="slider__controls">
-        {/* Slider controls go here */}
-      </div>
-    </div>
-  );
-}
+      slides.map(slide => {
+        return /*#__PURE__*/(
+          React.createElement(Slide, {
+            key: slide.index,
+            slide: slide,
+            current: current,
+            handleSlideClick: this.handleSlideClick }));
 
 
 
