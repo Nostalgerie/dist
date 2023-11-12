@@ -106,7 +106,7 @@ class Slide extends React.Component {
 
       React.createElement("article", { className: "slide__content" }, /*#__PURE__*/
       React.createElement("h2", { className: "slide__headline" }, headline), /*#__PURE__*/
-      React.createElement("button", { className: "slide__action btn", onClick: this.handleButtonClick }, button)
+      React.createElement("button", { className: "slide__action btn", onClick: this.handleButtonClick }, button),
 
 
 
