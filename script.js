@@ -199,7 +199,7 @@ class Slider extends React.Component {
             key: slide.index,
             slide: slide,
             current: current,
-            direction=direction
+            direction: direction,
             handleSlideClick: this.handleSlideClick }));
 
 
