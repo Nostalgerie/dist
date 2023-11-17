@@ -135,7 +135,7 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { current: 0, mounted: false };
+    this.state = { current: 0 };
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
@@ -171,21 +171,22 @@ class Slider extends React.Component {
 
 
   handleSlideClick(index) {
-  if (this.state.current !== index) {
-    const direction = index > this.state.current ? 'next' : 'prev';
-    this.setState({
-      current: index,
-      direction: direction
-    });
-  }
-}
+    if (this.state.current !== index) {
+      this.setState({
+        current: index });
 
+    }
+  }
 
   render() {
     const { current, direction } = this.state;
     const { slides, heading } = this.props;
     const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()}`;
-    const wrapperTransform = {'transform': `translateX(-${current * (100 / slides.length)}%)`};
+    const wrapperTransform = {
+      'transform': `translateX(-${(current + 1) * (100 / (slides.length + 2))}%)`,
+    };
+
+
 
     return /*#__PURE__*/(
       React.createElement("div", { className: "slider", "aria-labelledby": headingId }, /*#__PURE__*/
@@ -198,7 +199,6 @@ class Slider extends React.Component {
             key: slide.index,
             slide: slide,
             current: current,
-            direction: direction,
             handleSlideClick: this.handleSlideClick }));
 
 
