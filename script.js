@@ -135,7 +135,7 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { current: 0 };
+    this.state = { current: 0, direction: 'next' };
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
@@ -150,24 +150,18 @@ class Slider extends React.Component {
   }
 
   handlePreviousClick() {
-    const previous = this.state.current - 1;
+  this.setState({
+    current: this.state.current - 1 < 0 ? this.props.slides.length - 1 : this.state.current - 1,
+    direction: 'prev'
+  });
+}
 
-    this.setState({
-      current: previous < 0 ?
-      this.props.slides.length - 1 :
-      previous });
-
-  }
-
-  handleNextClick() {
-    const next = this.state.current + 1;
-
-    this.setState({
-      current: next === this.props.slides.length ?
-      0 :
-      next });
-
-  }
+handleNextClick() {
+  this.setState({
+    current: this.state.current + 1 === this.props.slides.length ? 0 : this.state.current + 1,
+    direction: 'next'
+  });
+}
 
 
   handleSlideClick(index) {
@@ -197,6 +191,7 @@ class Slider extends React.Component {
             key: slide.index,
             slide: slide,
             current: current,
+            direction: direction,
             handleSlideClick: this.handleSlideClick }));
 
 
