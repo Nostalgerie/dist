@@ -185,8 +185,7 @@ class Slider extends React.Component {
     const { current, direction } = this.state;
     const { slides, heading } = this.props;
     const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()}`;
-    const wrapperTransform = {'transform': `translateX(-${(current + 1) * (100 / slides.length)}%)`};
-
+    const wrapperTransform = {'transform': `translateX(-${current * (100 / slides.length)}%)`};
 
     return /*#__PURE__*/(
       React.createElement("div", { className: "slider", "aria-labelledby": headingId }, /*#__PURE__*/
