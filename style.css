@@ -95,7 +95,7 @@ h1, h2, h3 {
 }
 
 .slider {
-  --slide-size: 80vmin;
+  --slide-size: 78vmin;
   --slide-margin: 4vmin;
   height: var(--slide-size);
   margin: 0 auto;
