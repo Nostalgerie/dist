@@ -149,21 +149,21 @@ class Slider extends React.Component {
     hammer.on('swiperight', this.handlePreviousClick);
   }
 
-  handlePreviousClick() {
-  const previous = this.state.current - 1;
+   handlePreviousClick() {
+    const previous = this.state.current - 1 < 0 ? this.props.slides.length - 1 : this.state.current - 1;
 
-  this.setState({
-    current: previous < 0 ? this.props.slides.length - 1 : previous,
-  });
-}
+    this.setState({
+      current: previous,
+    });
+  }
 
-handleNextClick() {
-  const next = this.state.current + 1;
+  handleNextClick() {
+    const next = (this.state.current + 1) % this.props.slides.length;
 
-  this.setState({
-    current: next === this.props.slides.length ? 0 : next,
-  });
-}
+    this.setState({
+      current: next,
+    });
+  }
 
 
 
@@ -175,51 +175,44 @@ handleNextClick() {
     }
   }
 
-  render() {
-    const { current, direction } = this.state;
+ render() {
+    const { current } = this.state;
     const { slides, heading } = this.props;
     const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()}`;
     const wrapperTransform = {
-  transform: `translateX(-${(current + 1) * (100 / (slides.length + 1))}%)`,
-};
+      transform: `translateX(-${current * (100 / (slides.length + 2))}%)`,
+    };
 
+    return (
+      <div className="slider" aria-labelledby={headingId}>
+        <ul className="slider__wrapper" style={wrapperTransform}>
+          <h3 id={headingId} className="visuallyhidden">
+            {heading}
+          </h3>
+          {slides.map((slide, index) => (
+            <Slide
+              key={slide.index}
+              slide={slide}
+              current={current}
+              handleSlideClick={this.handleSlideClick}
+            />
+          ))}
+        </ul>
+        <div className="slider__controls">
+          <SliderControl
+            type="previous"
+            title="Go to previous slide"
+            handleClick={this.handlePreviousClick}
+          />
+          <SliderControl
+            type="next"
+            title="Go to next slide"
+            handleClick={this.handleNextClick}
+          />
+        </div>
+      </div>
+    );
+  }
+}
 
-
-    return /*#__PURE__*/(
-      React.createElement("div", { className: "slider", "aria-labelledby": headingId }, /*#__PURE__*/
-      React.createElement("ul", { className: "slider__wrapper", style: wrapperTransform }, /*#__PURE__*/
-      React.createElement("h3", { id: headingId, class: "visuallyhidden" }, heading),
-
-      slides.map(slide => {
-        return /*#__PURE__*/(
-          React.createElement(Slide, {
-            key: slide.index,
-            slide: slide,
-            current: current,
-            handleSlideClick: this.handleSlideClick }));
-
-
-
-      })), /*#__PURE__*/
-
-
-      React.createElement("div", { className: "slider__controls" }, /*#__PURE__*/
-      React.createElement(SliderControl, {
-        type: "previous",
-        title: "Go to previous slide",
-        handleClick: this.handlePreviousClick }), /*#__PURE__*/
-
-
-      React.createElement(SliderControl, {
-        type: "next",
-        title: "Go to next slide",
-        handleClick: this.handleNextClick }))));
-
-
-
-
-  }}
-
-
-
-ReactDOM.render( /*#__PURE__*/React.createElement(Slider, { heading: "Example Slider", slides: slideData }), document.getElementById('app'));
+ReactDOM.render(<Slider heading="Example Slider" slides={slideData} />, document.getElementById('app'));
