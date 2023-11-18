@@ -44,18 +44,14 @@ const slideData = [
 // =========================
 // Slide
 // =========================
-class Slide extends React.Component {
+class Slide {
   constructor(props) {
-    super(props);
-    this.handleMouseMove = this.handleMouseMove.bind(this);
-    this.handleMouseLeave = this.handleMouseLeave.bind(this);
-    this.handleSlideClick = this.handleSlideClick.bind(this);
-    this.handleButtonClick = this.handleButtonClick.bind(this);
-    this.imageLoaded = this.imageLoaded.bind(this);
-    this.slide = React.createRef();
+    this.props = props;
+    this.slide = this.createSlide();
   }
+
   handleMouseMove(event) {
-    const el = this.slide.current;
+    const el = this.slide;
     const r = el.getBoundingClientRect();
 
     el.style.setProperty('--x', event.clientX - (r.left + Math.floor(r.width / 2)));
@@ -63,173 +59,182 @@ class Slide extends React.Component {
   }
 
   handleMouseLeave(event) {
-    this.slide.current.style.setProperty('--x', 0);
-    this.slide.current.style.setProperty('--y', 0);
+    this.slide.style.setProperty('--x', 0);
+    this.slide.style.setProperty('--y', 0);
   }
+
   handleSlideClick(event) {
     this.props.handleSlideClick(this.props.slide.index);
   }
 
   handleButtonClick(event) {
-  // Open the URL in a new tab when the button is clicked
-  window.top.location.href = this.props.slide.url;
-}
+    window.top.location.href = this.props.slide.url;
+  }
+
   imageLoaded(event) {
     event.target.style.opacity = 1;
   }
-  render() {
+
+  createSlide() {
     const { src, url, button, headline, index } = this.props.slide;
     const current = this.props.current;
     let classNames = 'slide';
-    if (current === index) classNames += ' slide--current';else
-    if (current - 1 === index) classNames += ' slide--previous';else
-    if (current + 1 === index) classNames += ' slide--next';
+    if (current === index) classNames += ' slide--current';
+    else if (current - 1 === index) classNames += ' slide--previous';
+    else if (current + 1 === index) classNames += ' slide--next';
 
-    return /*#__PURE__*/(
-      React.createElement("li", {
-        ref: this.slide,
-        className: classNames,
-        onClick: this.handleSlideClick,
-        onButtonClick: this.handleButtonClick,
-        onMouseMove: this.handleMouseMove,
-        onMouseLeave: this.handleMouseLeave }, /*#__PURE__*/
+    const slide = document.createElement('li');
+    slide.className = classNames;
+    slide.addEventListener('click', this.handleSlideClick.bind(this));
+    slide.addEventListener('mousemove', this.handleMouseMove.bind(this));
+    slide.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
 
-      React.createElement("div", { className: "slide__image-wrapper" }, /*#__PURE__*/
-      React.createElement("img", {
-        className: "slide__image",
-        alt: headline,
-        src: src,
-        url: url,
-        onLoad: this.imageLoaded })), /*#__PURE__*/
+    const imageWrapper = document.createElement('div');
+    imageWrapper.className = 'slide__image-wrapper';
 
+    const image = document.createElement('img');
+    image.className = 'slide__image';
+    image.alt = headline;
+    image.src = src;
+    image.url = url;
+    image.onload = this.imageLoaded.bind(this);
 
+    imageWrapper.appendChild(image);
 
-      React.createElement("article", { className: "slide__content" }, /*#__PURE__*/
-      React.createElement("h2", { className: "slide__headline" }, headline), /*#__PURE__*/
-      React.createElement("button", { className: "slide__action btn", onClick: this.handleButtonClick }, button))));
+    const content = document.createElement('article');
+    content.className = 'slide__content';
 
+    const slideHeadline = document.createElement('h2');
+    slideHeadline.className = 'slide__headline';
+    slideHeadline.textContent = headline;
 
+    const slideButton = document.createElement('button');
+    slideButton.className = 'slide__action btn';
+    slideButton.textContent = button;
+    slideButton.addEventListener('click', this.handleButtonClick.bind(this));
 
-  }}
-  
+    content.appendChild(slideHeadline);
+    content.appendChild(slideButton);
 
+    slide.appendChild(imageWrapper);
+    slide.appendChild(content);
 
-// =========================
-// Slider control
-// =========================
+    return slide;
+  }
+}
 
-const SliderControl = ({ type, title, handleClick }) => {
-  return /*#__PURE__*/(
-    React.createElement("button", { className: `btn btn--${type}`, title: title, onClick: handleClick }, /*#__PURE__*/
-    React.createElement("svg", { className: "icon", viewBox: "0 0 24 24" }, /*#__PURE__*/
-    React.createElement("path", { d: "M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" }))));
-
-};
-
-
-// =========================
-// Slider
-// =========================
-
-class Slider extends React.Component {
+class SliderControl {
   constructor(props) {
-    super(props);
+    this.props = props;
+    this.control = this.createControl();
+  }
 
-    this.state = { current: 0 };
+  createControl() {
+    const { type, title, handleClick } = this.props;
+    const control = document.createElement('button');
+    control.className = `btn btn--${type}`;
+    control.title = title;
+    control.addEventListener('click', handleClick);
+
+    const icon = document.createElement('svg');
+    icon.className = 'icon';
+    icon.setAttribute('viewBox', '0 0 24 24');
+
+    const path = document.createElement('path');
+    path.setAttribute('d', 'M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z');
+
+    icon.appendChild(path);
+    control.appendChild(icon);
+
+    return control;
+  }
+}
+
+class Slider {
+  constructor(props) {
+    this.props = props;
+    this.state = { current: 0, direction: '' };
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
-  }
-
-  componentDidMount() {
-    const sliderWrapper = document.querySelector('.slider__wrapper');
-    const hammer = new Hammer(sliderWrapper);
-
-    hammer.on('swipeleft', this.handleNextClick);
-    hammer.on('swiperight', this.handlePreviousClick);
+    this.render();
   }
 
   handlePreviousClick() {
     const previous = this.state.current - 1;
-
     this.setState({
-      current: previous < 0 ?
-      this.props.slides.length - 1 :
-      previous });
-
+      current: previous < 0 ? this.props.slides.length - 1 : previous,
+      direction: 'prev',
+    });
   }
 
   handleNextClick() {
     const next = this.state.current + 1;
-
     this.setState({
-      current: next === this.props.slides.length ?
-      0 :
-      next });
-
+      current: next === this.props.slides.length ? 0 : next,
+      direction: 'next',
+    });
   }
-
 
   handleSlideClick(index) {
     if (this.state.current !== index) {
-      this.setState({
-        current: index });
-
+      this.setState({ current: index });
     }
   }
 
   render() {
     const { current, direction } = this.state;
     const { slides, heading } = this.props;
-    const headingId = "slider-heading__" + heading.replace(/\s+/g, "-").toLowerCase();
-
-    // Calculate the translateX value based on the current slide and direction
-    const translateValue = current * (100 / slides.length);
+    const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()}`;
     const wrapperTransform = {
-      transform: "translateX(-" + translateValue + "%)",
-      transition: direction ? "transform 0.5s ease-in-out" : "", // Add transition only when there's a direction
+      transform: `translateX(-${current * (100 / slides.length)}%)`,
+      transition: direction ? 'transform 0.5s ease-in-out' : '',
     };
 
-    // Create an array of React.createElement calls for each Slide
-    const slideElements = slides.map(function (slide) {
-      return React.createElement(Slide, {
-        key: slide.index,
-        slide: slide,
-        current: current,
-        handleSlideClick: this.handleSlideClick,
-      });
-    }, this);
+    const slider = document.createElement('div');
+    slider.className = 'slider';
+    slider.setAttribute('aria-labelledby', headingId);
 
-    // Return the final React.createElement for the Slider component
-    return React.createElement(
-      "div",
-      { className: "slider", "aria-labelledby": headingId },
-      React.createElement(
-        "ul",
-        { className: "slider__wrapper", style: wrapperTransform },
-        React.createElement("h3", { id: headingId, className: "visuallyhidden" }, heading),
-        slideElements
-      ),
-      React.createElement(
-        "div",
-        { className: "slider__controls" },
-        React.createElement(SliderControl, {
-          type: "previous",
-          title: "Go to previous slide",
-          handleClick: this.handlePreviousClick,
-        }),
-        React.createElement(SliderControl, {
-          type: "next",
-          title: "Go to next slide",
-          handleClick: this.handleNextClick,
-        })
-      )
-    );
+    const wrapper = document.createElement('ul');
+    wrapper.className = 'slider__wrapper';
+    wrapper.style.cssText = `transform: ${wrapperTransform.transform}; transition: ${wrapperTransform.transition}`;
+
+    const headingElement = document.createElement('h3');
+    headingElement.id = headingId;
+    headingElement.className = 'visuallyhidden';
+    headingElement.textContent = heading;
+
+    wrapper.appendChild(headingElement);
+
+    slides.forEach((slide) => {
+      const slideComponent = new Slide({ slide, current, handleSlideClick: this.handleSlideClick });
+      wrapper.appendChild(slideComponent.slide);
+    });
+
+    const controls = document.createElement('div');
+    controls.className = 'slider__controls';
+
+    const previousControl = new SliderControl({
+      type: 'previous',
+      title: 'Go to previous slide',
+      handleClick: this.handlePreviousClick,
+    });
+
+    const nextControl = new SliderControl({
+      type: 'next',
+      title: 'Go to next slide',
+      handleClick: this.handleNextClick,
+    });
+
+    controls.appendChild(previousControl.control);
+    controls.appendChild(nextControl.control);
+
+    slider.appendChild(wrapper);
+    slider.appendChild(controls);
+
+    document.getElementById('app').appendChild(slider);
   }
 }
 
 // Render the Slider component
-ReactDOM.render(
-  React.createElement(Slider, { heading: "Example Slider", slides: slideData }),
-  document.getElementById("app")
-);
+new Slider({ heading: 'Example Slider', slides: slideData });
