@@ -1,46 +1,63 @@
 const slideData = [
 {
   index: 0,
-  headline: 'Carmen R',
+  headline: 'Carmen',
   button: 'Explore',
-  url: 'https://nostalgerie.eu/all-products#carmenr',
+  url: 'https://nostalgerie.eu/collections#carmen',
   src: 'https://i.imgur.com/5Lf2kgz.jpg' },
 
 {
   index: 1,
   headline: 'Lady',
   button: 'Explore',
-  url: 'https://nostalgerie.eu/all-products#lady',
+  url: 'https://nostalgerie.eu/collections#lady',
   src: 'https://i.imgur.com/kPrsCl9.jpg' },
 
 {
   index: 2,
-  headline: 'Dana R',
+  headline: 'Dana',
   button: 'Explore',
-  url: 'https://nostalgerie.eu/all-products#danar',
-  src: 'https://i.imgur.com/M2VwVn2.jpg' },
-
-{
-  index: 3,
-  headline: 'Dana B',
-  button: 'Explore',
-  url: 'https://nostalgerie.eu/all-products#danab',
+  url: 'https://nostalgerie.eu/collections#dana',
   src: 'https://i.imgur.com/4YtBya0.jpg' },
 
 {
-  index: 4,
-  headline: 'Cora W',
+  index: 3,
+  headline: 'Katia',
   button: 'Explore',
-  url: 'https://nostalgerie.eu/all-products#coraw',
+  url: 'https://nostalgerie.eu/collections#katia',
+  src: 'https://i.imgur.com/JijVf8C.jpg' },
+
+{
+  index: 4,
+  headline: 'Cora',
+  button: 'Explore',
+  url: 'https://nostalgerie.eu/collections#cora',
   src: 'https://i.imgur.com/T16xmnq.jpg' },
 
 {
   index: 5,
   headline: 'Miss',
   button: 'Explore',
-  url: 'https://nostalgerie.eu/all-products#miss',
-  src: 'https://i.imgur.com/zj0kpFj.jpg' }];
-
+  url: 'https://nostalgerie.eu/collections#miss',
+  src: 'https://i.imgur.com/YOmTJY1.jpg' },
+{
+  index: 6,
+  headline: 'Yuki',
+  button: 'Explore',
+  url: 'https://nostalgerie.eu/collections#yuki',
+  src: 'https://i.imgur.com/solaZL4.jpg' },
+{
+  index: 7,
+  headline: 'Scilla',
+  button: 'Explore',
+  url: 'https://nostalgerie.eu/collections#scilla',
+  src: 'https://i.imgur.com/H8rA2XI.jpg' },
+{
+  index: 8,
+  headline: 'Kim',
+  button: 'Explore',
+  url: 'https://nostalgerie.eu/collections#kim',
+  src: 'https://i.imgur.com/RGMUeyC.jpg' }];
 // =========================
 // Slide
 // =========================
@@ -143,7 +160,7 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { current: 0 };
+    this.state = { current: 1 };
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
