@@ -150,24 +150,21 @@ class Slider extends React.Component {
   }
 
   handlePreviousClick() {
-    const previous = this.state.current - 1;
+  const previous = this.state.current - 1;
 
-    this.setState({
-      current: previous < 0 ?
-      this.props.slides.length - 1 :
-      previous });
+  this.setState({
+    current: previous < 0 ? this.props.slides.length - 1 : previous,
+  });
+}
 
-  }
+handleNextClick() {
+  const next = this.state.current + 1;
 
-  handleNextClick() {
-    const next = this.state.current + 1;
+  this.setState({
+    current: next === this.props.slides.length ? 0 : next,
+  });
+}
 
-    this.setState({
-      current: next === this.props.slides.length ?
-      0 :
-      next });
-
-  }
 
 
   handleSlideClick(index) {
@@ -183,7 +180,9 @@ class Slider extends React.Component {
     const { slides, heading } = this.props;
     const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()}`;
     const wrapperTransform = {
-      'transform': `translateX(-${current * (100 / slides.length)}%)` };
+  transform: `translateX(-${(current + 1) * (100 / (slides.length + 1))}%)`,
+};
+
 
 
     return /*#__PURE__*/(
