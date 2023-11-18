@@ -95,7 +95,7 @@ h1, h2, h3 {
 }
 
 .slider {
-  --slide-size: 76vmin;
+  --slide-size: 78vmin;
   --slide-margin: 4vmin;
   height: var(--slide-size);
   margin: 0 auto;
@@ -127,19 +127,19 @@ h1, h2, h3 {
   width: var(--slide-size);
   z-index: 1;
 }
-.slide--previous:hover, .slide--next:hover, .slide--first:hover, .slide--last:hover {
+.slide--previous:hover, .slide--next:hover {
   opacity: 0.5;
 }
-.slide--previous, .slide--last {
+.slide--previous {
   cursor: w-resize;
 }
-.slide--previous:hover, .slide--last {
+.slide--previous:hover {
   transform: translateX(2%);
 }
-.slide--next, .slide--first {
+.slide--next {
   cursor: e-resize;
 }
-.slide--next:hover, .slide--first {
+.slide--next:hover {
   transform: translateX(-2%);
 }
 
