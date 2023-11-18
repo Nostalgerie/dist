@@ -135,14 +135,7 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    // Duplicate the first and last slides
-    const extendedSlides = [
-      props.slides[props.slides.length - 1],
-      ...props.slides,
-      props.slides[0],
-    ];
-
-    this.state = { current: 1, slides: extendedSlides };
+    this.state = { current: 0 };
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handleSlideClick = this.handleSlideClick.bind(this);
@@ -178,61 +171,65 @@ class Slider extends React.Component {
 
 
   handleSlideClick(index) {
-  const totalSlides = this.props.slides.length;
-  let newCurrent;
+    if (this.state.current !== index) {
+      this.setState({
+        current: index });
 
-  if (index === 0) {
-    // Clicked on the duplicated first slide, set to the last actual slide
-    newCurrent = totalSlides - 1;
-  } else if (index === totalSlides + 1) {
-    // Clicked on the duplicated last slide, set to the first actual slide
-    newCurrent = 0;
-  } else {
-    newCurrent = index - 1; // Adjust for duplicated slides
+    }
   }
 
-  this.setState({
-    current: newCurrent,
-  });
-}
-
   render() {
-  const { current } = this.state;
-  const { slides } = this.props;
-  const headingId = `slider-heading__${this.props.heading.replace(/\s+/g, '-').toLowerCase()}`;
-  const wrapperTransform = {
-    'transform': `translateX(-${current * (100 / (slides.length + 2))}%)`,
-  };
+    const { current, direction } = this.state;
+    const { slides, heading } = this.props;
+    const headingId = "slider-heading__" + heading.replace(/\s+/g, "-").toLowerCase();
 
-  return React.createElement(
-    'div',
-    { className: 'slider', 'aria-labelledby': headingId },
-    React.createElement('ul', { className: 'slider__wrapper', style: wrapperTransform },
-      React.createElement('h3', { id: headingId, className: 'visuallyhidden' }, this.props.heading),
+    // Calculate the translateX value based on the current slide and direction
+    const translateValue = current * (100 / slides.length);
+    const wrapperTransform = {
+      transform: "translateX(-" + translateValue + "%)",
+      transition: direction ? "transform 0.5s ease-in-out" : "", // Add transition only when there's a direction
+    };
 
-      this.state.slides.map((slide, index) =>
-        React.createElement(Slide, {
-          key: index,
-          slide: slide,
-          current: current,
-          handleSlideClick: this.handleSlideClick,
+    // Create an array of React.createElement calls for each Slide
+    const slideElements = slides.map(function (slide) {
+      return React.createElement(Slide, {
+        key: slide.index,
+        slide: slide,
+        current: current,
+        handleSlideClick: this.handleSlideClick,
+      });
+    }, this);
+
+    // Return the final React.createElement for the Slider component
+    return React.createElement(
+      "div",
+      { className: "slider", "aria-labelledby": headingId },
+      React.createElement(
+        "ul",
+        { className: "slider__wrapper", style: wrapperTransform },
+        React.createElement("h3", { id: headingId, className: "visuallyhidden" }, heading),
+        slideElements
+      ),
+      React.createElement(
+        "div",
+        { className: "slider__controls" },
+        React.createElement(SliderControl, {
+          type: "previous",
+          title: "Go to previous slide",
+          handleClick: this.handlePreviousClick,
+        }),
+        React.createElement(SliderControl, {
+          type: "next",
+          title: "Go to next slide",
+          handleClick: this.handleNextClick,
         })
       )
-    ),
+    );
+  }
+}
 
-    React.createElement('div', { className: 'slider__controls' },
-      React.createElement(SliderControl, {
-        type: 'previous',
-        title: 'Go to previous slide',
-        handleClick: this.handlePreviousClick,
-      }),
-      React.createElement(SliderControl, {
-        type: 'next',
-        title: 'Go to next slide',
-        handleClick: this.handleNextClick,
-      })
-    )
-  );
-}}
-
-ReactDOM.render( /*#__PURE__*/React.createElement(Slider, { heading: "Example Slider", slides: slideData }), document.getElementById('app'));
+// Render the Slider component
+ReactDOM.render(
+  React.createElement(Slider, { heading: "Example Slider", slides: slideData }),
+  document.getElementById("app")
+);
