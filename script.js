@@ -204,6 +204,7 @@ class Slider extends React.Component {
           React.createElement(Slide, {
             key: slide.index,
             slide: slide,
+            slides: slides,
             current: current,
             handleSlideClick: this.handleSlideClick }));
 
