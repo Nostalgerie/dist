@@ -178,50 +178,61 @@ class Slider extends React.Component {
 
 
   handleSlideClick(index) {
-    if (this.state.current !== index) {
-      this.setState({
-        current: index });
+  const totalSlides = this.props.slides.length;
+  let newCurrent;
 
-    }
+  if (index === 0) {
+    // Clicked on the duplicated first slide, set to the last actual slide
+    newCurrent = totalSlides - 1;
+  } else if (index === totalSlides + 1) {
+    // Clicked on the duplicated last slide, set to the first actual slide
+    newCurrent = 0;
+  } else {
+    newCurrent = index - 1; // Adjust for duplicated slides
   }
+
+  this.setState({
+    current: newCurrent,
+  });
+}
 
   render() {
-    const { current } = this.state;
-    const headingId = `slider-heading__${this.props.heading.replace(/\s+/g, '-').toLowerCase()}`;
-    const wrapperTransform = {
-      'transform': `translateX(-${current * (100 / this.state.slides.length)}%)`,
-    };
+  const { current } = this.state;
+  const { slides } = this.props;
+  const headingId = `slider-heading__${this.props.heading.replace(/\s+/g, '-').toLowerCase()}`;
+  const wrapperTransform = {
+    'transform': `translateX(-${current * (100 / (slides.length + 2))}%)`,
+  };
 
-    return React.createElement(
-      'div',
-      { className: 'slider', 'aria-labelledby': headingId },
-      React.createElement('ul', { className: 'slider__wrapper', style: wrapperTransform },
-        React.createElement('h3', { id: headingId, className: 'visuallyhidden' }, this.props.heading),
+  return React.createElement(
+    'div',
+    { className: 'slider', 'aria-labelledby': headingId },
+    React.createElement('ul', { className: 'slider__wrapper', style: wrapperTransform },
+      React.createElement('h3', { id: headingId, className: 'visuallyhidden' }, this.props.heading),
 
-        this.state.slides.map((slide, index) =>
-          React.createElement(Slide, {
-            key: index,
-            slide: slide,
-            current: current,
-            handleSlideClick: this.handleSlideClick,
-          })
-        )
-      ),
-
-      React.createElement('div', { className: 'slider__controls' },
-        React.createElement(SliderControl, {
-          type: 'previous',
-          title: 'Go to previous slide',
-          handleClick: this.handlePreviousClick,
-        }),
-        React.createElement(SliderControl, {
-          type: 'next',
-          title: 'Go to next slide',
-          handleClick: this.handleNextClick,
+      this.state.slides.map((slide, index) =>
+        React.createElement(Slide, {
+          key: index,
+          slide: slide,
+          current: current,
+          handleSlideClick: this.handleSlideClick,
         })
       )
-    );
-  }
+    ),
+
+    React.createElement('div', { className: 'slider__controls' },
+      React.createElement(SliderControl, {
+        type: 'previous',
+        title: 'Go to previous slide',
+        handleClick: this.handlePreviousClick,
+      }),
+      React.createElement(SliderControl, {
+        type: 'next',
+        title: 'Go to next slide',
+        handleClick: this.handleNextClick,
+      })
+    )
+  );
 }
 
 ReactDOM.render( /*#__PURE__*/React.createElement(Slider, { heading: "Example Slider", slides: slideData }), document.getElementById('app'));
