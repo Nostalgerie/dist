@@ -233,6 +233,6 @@ class Slider extends React.Component {
       })
     )
   );
-}
+}}
 
 ReactDOM.render( /*#__PURE__*/React.createElement(Slider, { heading: "Example Slider", slides: slideData }), document.getElementById('app'));
