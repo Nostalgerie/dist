@@ -80,10 +80,16 @@ class Slide extends React.Component {
   render() {
     const { src, url, button, headline, index } = this.props.slide;
     const current = this.props.current;
+    const totalSlides = this.props.slides.length; // Adjusted to get the total number of slides
     let classNames = 'slide';
-    if (current === index) classNames += ' slide--current';else
-    if (current - 1 === index || current - 1 === -1) classNames += ' slide--previous';else
-    if (current + 1 === index || current + 1 === 7) classNames += ' slide--next';
+
+    if (current === index) classNames += ' slide--current';
+    else if (current - 1 === index || (current === 0 && index === totalSlides - 1)) {
+      classNames += ' slide--previous';
+    } else if (current + 1 === index || (current === totalSlides - 1 && index === 0)) {
+      classNames += ' slide--next';
+    }
+
 
 
     
