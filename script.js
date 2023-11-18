@@ -83,7 +83,9 @@ class Slide extends React.Component {
     let classNames = 'slide';
     if (current === index) classNames += ' slide--current';else
     if (current - 1 === index) classNames += ' slide--previous';else
-    if (current + 1 === index) classNames += ' slide--next';
+    if (current + 1 === index) classNames += ' slide--next';else
+    if (current - 1 < 0) classNames += ' slide--last';else
+    if (current - 1 > this.props.slides.length) classNames += ' slide--first';
 
     return /*#__PURE__*/(
       React.createElement("li", {
@@ -183,7 +185,9 @@ class Slider extends React.Component {
     const { slides, heading } = this.props;
     const headingId = `slider-heading__${heading.replace(/\s+/g, '-').toLowerCase()}`;
     const wrapperTransform = {
-      'transform': `translateX(calc(-${current} * (100% / ${slides.length}) + ${(100 / slides.length) / 2}vw))` };
+      'transform': `translateX(-${current * (100 / slides.length)}%)` };
+    const previousSlideIndex = current === 0 ? slides.length - 1 : current - 1;
+    const previousSlide = slides[previousSlideIndex];
 
 
     return /*#__PURE__*/(
