@@ -83,7 +83,7 @@ class Slide extends React.Component {
     let classNames = 'slide';
     if (current === index) classNames += ' slide--current';else
     if (current - 1 === index || current - 1 === -1) classNames += ' slide--previous';else
-    if (current + 1 === index || current + 1 === this.props.slides.length + 1) classNames += ' slide--next';
+    if (current + 1 === index || current + 1 === 7) classNames += ' slide--next';
 
 
     
